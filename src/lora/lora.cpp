@@ -6,6 +6,9 @@ namespace Lora {
         os_init_ex(&lmic_pins);
         // Reset the MAC state. Session and pending data transfers will be discarded.
         LMIC_reset();
+        
+        LMIC_setClockError(MAX_CLOCK_ERROR*50/100);
+
         LMIC_startJoining();
     }
 
@@ -48,6 +51,21 @@ namespace Lora {
         } else {
             // Prepare upstream data transmission at the next possible time.
             LMIC_setTxData2(1, bytes, 7, 0);
+            Serial.println(F("Packet queued"));
+        }
+        // Next TX is scheduled after TX_COMPLETE event.
+    }
+
+    
+    static uint8_t mydata[] = "Hello, world!";
+
+    void Lora::do_send(){
+        // Check if there is not a current TX/RX job running
+        if (LMIC.opmode & OP_TXRXPEND) {
+            Serial.println(F("OP_TXRXPEND, not sending"));
+        } else {
+            // Prepare upstream data transmission at the next possible time.
+            LMIC_setTxData2(1, mydata, sizeof(mydata)-1, 0);
             Serial.println(F("Packet queued"));
         }
         // Next TX is scheduled after TX_COMPLETE event.

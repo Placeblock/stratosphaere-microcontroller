@@ -23,7 +23,7 @@ namespace Lora {
             .nss = 18,
             .rxtx = LMIC_UNUSED_PIN,
             .rst = 23,
-            .dio = {26},
+            .dio = {26, 33, 32},
     };
 
     class Lora : public Module {
@@ -33,13 +33,14 @@ namespace Lora {
             HIHSensor *hihSensor;
             MS5Sensor *ms5Sensor;
             long lastSent = 0;
-            void sendMessage(uint8_t *);
             static void setBits(uint8_t*, uint8_t, uint8_t, uint16_t);
         public:
             Lora(GPSSensor*, LM75Sensor*, HIHSensor*, MS5Sensor*);
             void configure() override;
             void tick() override;
             bool canWork(uint16_t);
+            void sendMessage(uint8_t *);
+            void do_send();
     };
 }
 
