@@ -1,0 +1,6 @@
+.pio
+.vscode
+cmake-build-debug/
+cmake-build-ttgo-t-beam/
+CMakeListsPrivate.txt
+.idea
